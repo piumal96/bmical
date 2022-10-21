@@ -31,7 +31,7 @@ class ScoreScreen extends StatelessWidget {
             children: [
               Text(
                 "Your Score",
-                style: TextStyle(fontSize: 30, color: Colors.amber),
+                style: TextStyle(fontSize: 30, color: Colors.blueAccent),
               ),
               PrettyGauge(
                 gaugeSize: 300,
@@ -49,10 +49,23 @@ class ScoreScreen extends StatelessWidget {
                 ),
                 currentValue: bmiScore.toDouble(),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 8,),
               Text(bmiStatus!,style: TextStyle(fontSize: 20,color: bmiStatusColor!),),
-              SizedBox(height: 10,),
-              Text(bmiInterpretation!,style: TextStyle(fontSize: 20,color: bmiStatusColor!),),
+              SizedBox(height: 5,),
+              Text(bmiInterpretation!,style: TextStyle(fontSize: 14),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, child: Text("Re-Calculate")),
+
+                  SizedBox(width: 10,),
+                  ElevatedButton(onPressed: (){
+                  }, child: Text("Share")),
+
+                ],
+              )
 
             ],
 
