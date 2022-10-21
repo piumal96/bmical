@@ -1,6 +1,10 @@
+import 'dart:math';
+
+import 'package:bmical/screens/score_screen.dart';
 import 'package:bmical/widget/age_weight_widget.dart';
 import 'package:bmical/widget/gender_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 import '../widget/height_widget.dart';
@@ -16,7 +20,8 @@ int _gender = 0;
 int _height = 150;
 int _age = 26;
 int _weight = 68;
-
+bool _isFinished=false;
+double _bmiScore=0.0;
 class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
@@ -65,10 +70,29 @@ class _homeState extends State<home> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 80),
                 child: SwipeableButtonView(
-                    onFinish: () {},
-                    onWaitingProcess: () {},
-                    activeColor: Colors.blueAccent,
-                    buttonWidget: Icon(Icons.arrow_forward_ios_rounded),
+                    isFinished: _isFinished,
+                    onFinish: () async {
+                      
+                      await Navigator.push(context, PageTransition(child: ScoreScreen(bmiScore: _bmiScore, age: _age), type: PageTransitionType.fade));
+                      setState(() {
+                        _isFinished = false;
+                      });
+                    },
+                    onWaitingProcess: () {
+                      //Calculate BMI here
+                      calculateBMI();
+
+                      Future.delayed(Duration(seconds: 1), () {
+                        setState(() {
+                          _isFinished = true;
+                        });
+                      });
+                    },
+                    activeColor: Colors.blue,
+                    buttonWidget: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.black,
+                    ),
                     buttonText: "CALCULATE"),
               )
             ],
@@ -76,5 +100,10 @@ class _homeState extends State<home> {
         ),
       ),
     );
+
+  }
+
+  void calculateBMI(){
+    _bmiScore=_weight/pow(_height/100, 2);
   }
 }
